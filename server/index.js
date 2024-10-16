@@ -1,15 +1,13 @@
 const http = require('http');
 const fs = require('fs');
 
-const port = '5000';
-const hostname = '127.0.0.1';
+// File paths for data storage
+const bootcampsFile = './bootcamps.json';
+const reviewsFile = './reviews.json';
 
-// File where data is stored
-const dataFile = './items.json';
-
-// Helper function to read the file
-const readDataFromFile = (callback) => {
-  fs.readFile(dataFile, 'utf8', (err, data) => {
+// Helper functions to read and write data
+const readDataFromFile = (file, callback) => {
+  fs.readFile(file, 'utf8', (err, data) => {
     if (err) {
       callback([]);
     } else {
@@ -18,20 +16,15 @@ const readDataFromFile = (callback) => {
   });
 };
 
-// Helper function to write data to the file
-const writeDataToFile = (data, callback) => {
-  fs.writeFile(dataFile, JSON.stringify(data), 'utf8', callback);
+const writeDataToFile = (file, data, callback) => {
+  fs.writeFile(file, JSON.stringify(data), 'utf8', callback);
 };
 
 // Creating the server
-
 const server = http.createServer((req, res) => {
-  
-  
-  
   const { method, url } = req;
 
-  // Setting common response headers
+  // Common headers
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, DELETE');
@@ -41,78 +34,62 @@ const server = http.createServer((req, res) => {
     return res.end();
   }
 
-  // GET /items - Read all items
-  if (method === 'GET' && url === '/items') {
-    readDataFromFile((items) => {
+  // GET /api/bootcamps - Get all bootcamps
+  if (method === 'GET' && url === '/api/bootcamps') {
+    readDataFromFile(bootcampsFile, (bootcamps) => {
       res.writeHead(200);
-      res.end(JSON.stringify(items));
+      res.end(JSON.stringify(bootcamps));
     });
 
-  // POST /items - Create a new item
-  } else if (method === 'POST' && url === '/items') {
-    let body = '';
+  // GET /api/bootcamps/:id - Get a single bootcamp
+  } else if (method === 'GET' && url.startsWith('/api/bootcamps/')) {
+    const id = url.split('/')[3];
+    readDataFromFile(bootcampsFile, (bootcamps) => {
+      const bootcamp = bootcamps.find(b => b.id === id);
+      if (!bootcamp) {
+        res.writeHead(404);
+        res.end(JSON.stringify({ message: 'Bootcamp not found' }));
+      } else {
+        res.writeHead(200);
+        res.end(JSON.stringify(bootcamp));
+      }
+    });
 
+  // POST /api/reviews - Submit a review
+  } else if (method === 'POST' && url === '/api/reviews') {
+    let body = '';
     req.on('data', chunk => {
       body += chunk.toString();
     });
-
     req.on('end', () => {
-      const newItem = JSON.parse(body);
-      readDataFromFile((items) => {
-        newItem.id = Date.now().toString();
-        items.push(newItem);
-        writeDataToFile(items, () => {
+      const newReview = JSON.parse(body);
+      readDataFromFile(reviewsFile, (reviews) => {
+        newReview.id = Date.now().toString();
+        reviews.push(newReview);
+        writeDataToFile(reviewsFile, reviews, () => {
           res.writeHead(201);
-          res.end(JSON.stringify(newItem));
+          res.end(JSON.stringify(newReview));
         });
       });
     });
 
-  // PUT /items/:id - Update an item
-  } else if (method === 'PUT' && url.startsWith('/items/')) {
-    const id = url.split('/')[2];
-    let body = '';
-
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
-
-    req.on('end', () => {
-      const updatedItem = JSON.parse(body);
-      readDataFromFile((items) => {
-        const index = items.findIndex(item => item.id === id);
-        if (index === -1) {
-          res.writeHead(404);
-          res.end(JSON.stringify({ message: 'Item not found' }));
-        } else {
-          items[index] = { ...items[index], ...updatedItem };
-          writeDataToFile(items, () => {
-            res.writeHead(200);
-            res.end(JSON.stringify(items[index]));
-          });
-        }
-      });
-    });
-
-  // DELETE /items/:id - Delete an item
-  } else if (method === 'DELETE' && url.startsWith('/items/')) {
-    const id = url.split('/')[2];
-    readDataFromFile((items) => {
-      const filteredItems = items.filter(item => item.id !== id);
-      writeDataToFile(filteredItems, () => {
-        res.writeHead(204);
-        res.end();
-      });
+  // GET /api/reviews/:id - Get reviews for a specific bootcamp
+  } else if (method === 'GET' && url.startsWith('/api/reviews/')) {
+    const bootcampId = url.split('/')[3];
+    readDataFromFile(reviewsFile, (reviews) => {
+      const bootcampReviews = reviews.filter(r => r.bootcampId === bootcampId);
+      res.writeHead(200);
+      res.end(JSON.stringify(bootcampReviews));
     });
 
   } else {
-    // Handling other routes
+    // Handle invalid routes
     res.writeHead(404);
     res.end(JSON.stringify({ message: 'Route not found' }));
   }
 });
 
-// Server listens on port 3000
+// Server listens on port 5000
 server.listen(5000, () => {
   console.log('Server running on port 5000');
 });
