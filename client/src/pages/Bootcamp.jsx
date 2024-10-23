@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 
-const Bootcamp = () => {
+const Bootcamp = () => { //this will use prop for ID
     const id = 1695109843452;
     const [bootcamp, setBootcamp] = useState([]);
     const [error, setError] = useState(null);

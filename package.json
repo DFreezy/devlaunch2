@@ -8,5 +8,8 @@
     },
     "devDependencies": {
         "concurrently": "^9.0.1"
+    },
+    "dependencies": {
+        "react-router-dom": "^6.27.0"
     }
 }
