@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Review() {
   const id = 1695109843452; // Hardcoded ID, replace with prop or dynamic value if needed
-  // const [bootcamp, setBootcamp] = useState([]); // Hook to store bootcamp data
+  const [bootcamp, setBootcamp] = useState([]); // Hook to store bootcamp data
   const [error, setError] = useState(null); // Hook to store errors
 
   useEffect(() => {
