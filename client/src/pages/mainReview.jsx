@@ -2,42 +2,33 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Review() {
-  const id = 1695109843452; // Hardcoded ID, replace with prop or dynamic value if needed
-  const [bootcamp, setBootcamp] = useState([]); // Hook to store bootcamp data
-  const [error, setError] = useState(null); // Hook to store errors
+  // const id = 1695109843452; // Hardcoded ID, replace with prop or dynamic value if needed
+  // const [bootcamp, setBootcamp] = useState([]); // Hook to store bootcamp data
+  // const [error, setError] = useState(null); // Hook to store errors
 
-  useEffect(() => {
-    const fetchBootcamp = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/api/bootcamps/${id}`);
-        if (!response.ok) {
-          throw new Error("Network response not ok");
-        }
-        const data = await response.json();
-        setBootcamp(data);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-    fetchBootcamp();
-  }, [id]); // Added id as a dependency in useEffect
+  // useEffect(() => {
+  //   const fetchBootcamp = async () => {
+  //     try {
+  //       const response = await fetch(`http://localhost:5000/api/bootcamps/${id}`);
+  //       if (!response.ok) {
+  //         throw new Error("Network response not ok");
+  //       }
+  //       const data = await response.json();
+  //       setBootcamp(data);
+  //     } catch (error) {
+  //       setError(error.message);
+  //     }
+  //   };
+  //   fetchBootcamp();
+  // }, [id]); // Added id as a dependency in useEffect
 
-  if (error) {
-    return <div>Data fetching failed: {error}</div>;
-  }
+  // if (error) {
+  //   return <div>Data fetching failed: {error}</div>;
+  // }
 
   return (
     <div>
-      <nav>
-        <img src="/Assets/devlaunch-removebg-preview.png" alt="DevLaunch Logo" />
-        <ul className="navlist">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/bootcamps">Bootcamps</Link></li>
-          <li><Link to="/review">Review</Link></li>
-          <li><Link to="/contact">Contact Us</Link></li>
-          <li className="sign-in"><Link to="/signup">Sign In</Link></li>
-        </ul>
-      </nav>
+      
 
       <main> {/* Opening main tag */}
         <h1>DevLaunch Reviews</h1>
@@ -164,22 +155,7 @@ export default function Review() {
           </div>
         </form>
 
-        <footer className="footer">
-          <div className="container">
-            <div className="social-icons">
-              <a href="https://www.facebook.com" target="_blank" className="social-icon" rel="noreferrer">
-                <i className="fab fa-facebook-f"></i>
-              </a>
-              <a href="https://www.instagram.com" target="_blank" className="social-icon" rel="noreferrer">
-                <i className="fab fa-instagram"></i>
-              </a>
-              <a href="https://www.github.com" target="_blank" className="social-icon" rel="noreferrer">
-                <i className="fab fa-github"></i>
-              </a>
-            </div>
-            <p>&copy; 2024 Coding Stars. All rights reserved.</p>
-          </div>
-        </footer>
+        
       </main> {/* Closing main tag */}
     </div>
   );

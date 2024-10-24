@@ -18,7 +18,7 @@ function App() {
     <Header />
       <Routes>
         <Route path='/' element={<Home/>} />
-        <Route path='./pages/mainReview' element={<Review/>} />
+        <Route path='/review' element={<Review/>} />
       </Routes>
       <Footer/>
     </BrowserRouter>
