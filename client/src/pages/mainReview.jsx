@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Header from 'client/src/components/Header.jsx'; // Make sure this path is correct
 
 export default function Review() {
   const id = 1695109843452; // Hardcoded ID, replace with prop or dynamic value if needed
@@ -29,7 +28,6 @@ export default function Review() {
 
   return (
     <div>
-      <Header /> {/* Corrected the usage of the Header component */}
       <nav>
         <img src="/Assets/devlaunch-removebg-preview.png" alt="DevLaunch Logo" />
         <ul className="navlist">
