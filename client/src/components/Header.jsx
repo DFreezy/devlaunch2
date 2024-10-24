@@ -1,6 +1,5 @@
 import React from 'react';
 import logo from '../assests/devlaunch-removebg-preview.png';
-import { Link } from 'react-router-dom';
 
 function Header() {
   return (
